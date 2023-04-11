@@ -80,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: _email, password: _password);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomePage()));
+          MaterialPageRoute(builder: (context) => HomePage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
