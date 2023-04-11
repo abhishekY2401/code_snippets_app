@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart';
+import './create_code_page.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -80,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: _email, password: _password);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomePage()));
+          MaterialPageRoute(builder: (context) => CreateSnippetPage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
