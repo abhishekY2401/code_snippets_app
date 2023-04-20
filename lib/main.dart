@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import './utils/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import "./widgets/sign_up_widget.dart";
+import 'package:google_sign_in/google_sign_in.dart';
+import 'widgets/signup.dart';
+import 'package:provider/provider.dart';
 import "./widgets/login.dart";
 
 void main() async {
@@ -12,14 +15,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Code Snippets Manager App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MediaQuery(
-        data: const MediaQueryData(),
-        child: HomePage(),
+    return ChangeNotifierProvider(
+      create: (context) => Auth(),
+      child: MaterialApp(
+        title: 'Code Snippets Manager App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MediaQuery(
+          data: const MediaQueryData(),
+          child: HomePage(),
+        ),
       ),
     );
   }

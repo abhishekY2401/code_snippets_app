@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -73,11 +74,13 @@ class _LoginPageState extends State<LoginPage> {
                       );
                       if (userCredential.user != null) {
                         // Navigate to the home page
-                        Navigator.of(context).pushReplacementNamed('/home');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) =>
+                                CodeSnippetManagerHomePage()));
                       }
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found') {
-                        print('No user found for that email.');
+                          print('No user found for that email.');
                       } else if (e.code == 'wrong-password') {
                         print('Wrong password provided for that user.');
                       }
@@ -86,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
             ],
           ),
