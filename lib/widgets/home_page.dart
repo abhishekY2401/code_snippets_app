@@ -40,40 +40,79 @@ class _CodeSnippetManagerHomePageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Code Snippet Manager'),
+      appBar: AppBar(
+        title: const Text('Code Snippet Manager'),
+      ),
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.of(context).size.width ~/
+              200, // Adjust the box width as needed
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
         ),
-        body: ListView.builder(
-          itemCount: snippets.length,
-          itemBuilder: (context, index) {
-            // Access fields from QueryDocumentSnapshot using data() method
-            Map<String, dynamic> snippetData =
-                snippets[index].data() as Map<String, dynamic>;
-            String? title = snippetData['title'];
-            String? description = snippetData['readme'];
-            String? fileId = snippetData['fileId']
-                as String?; // Fetch additional field fileId
-            String? fileName = snippetData['uploadedFileName']
-                as String?; // Fetch additional field fileName
+        padding: EdgeInsets.all(8),
+        itemCount: snippets.length,
+        itemBuilder: (context, index) {
+          // Access fields from QueryDocumentSnapshot using data() method
+          Map<String, dynamic> snippetData =
+              snippets[index].data() as Map<String, dynamic>;
+          String? title = snippetData['title'];
+          String? description = snippetData['readme'];
+          String? fileId =
+              snippetData['fileId'] as String?; // Fetch additional field fileId
+          String? fileName = snippetData['uploadedFileName']
+              as String?; // Fetch additional field fileName
 
-            return ListTile(
-              title: Text(title ?? 'No Title'),
-              subtitle: Text(description ?? 'No Description'),
-              onTap: () {
-                // Implement logic to navigate to snippet details page
-                print('Snippet item tapped: ${snippets[index].id}');
-                print('File ID: $fileId'); // Use the additional field fileId
-                print(
-                    'File Name: $fileName'); // Use the additional field fileName
-                // Replace the above print statement with your actual logic to navigate to snippet details page
-              },
-            );
-          },
-        ),
-        floatingActionButton: ElevatedButton(
-          onPressed: _onCreateSnippetPressed,
-          child: const Icon(Icons.add),
-        ));
+          return Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Color(0xFF24292E),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title ?? 'No Title',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  description ?? 'No Description',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '$fileName', // Use the additional field fileName
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+        onPressed: _onCreateSnippetPressed,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
 
@@ -123,6 +162,7 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
         'txt',
         'cpp',
         'c',
+        '.py',
         '.ipynb'
       ],
     );
@@ -184,6 +224,8 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
         'uploadedFileName': _uploadedFileName, // Update with your file name
       });
       print('Snippet created successfully');
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => CodeSnippetManagerHomePage()));
     } catch (e) {
       print('Failed to create snippet: $e');
     }
